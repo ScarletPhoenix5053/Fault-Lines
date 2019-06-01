@@ -338,8 +338,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19e5fcb3ebf1b4f409d471b6bbdc1178, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeCountMin: 7
-  nodeCountMax: 7
+  connectionContainer: {fileID: 0}
+  nodeCountMin: 5
+  nodeCountMax: 12
   nodeDensityMin: 0.5
   nodeDensityMax: 0.5
 --- !u!1 &1614671092

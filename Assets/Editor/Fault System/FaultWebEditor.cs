@@ -18,13 +18,13 @@ public class FaultWebEditor : Editor
         // Generate
         if (GUILayout.Button(generateButtonText))
         {
-
+            faultWeb.GenerateFaultWeb();
         }
 
         // Clear/Reset
         if (GUILayout.Button(clearButtonText))
         {
-
+            faultWeb.ClearFaultWeb();
         }
 
         GUILayout.EndHorizontal();

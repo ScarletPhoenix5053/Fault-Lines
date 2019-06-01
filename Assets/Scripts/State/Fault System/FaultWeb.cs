@@ -1,27 +1,79 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SCARLET.NodeSystems;
 
 public class FaultWeb : MonoBehaviour
 {
+    #region Inspector
+    [Header("Connections")]
+    [SerializeField] private Transform connectionContainer;
     [Header("Node Field Generation")]
     [SerializeField] private int nodeCountMin = 7;
     [SerializeField] private int nodeCountMax = 7;
-    [SerializeField] [Range(0, 1)] private float nodeDensityMin = 0.5f;
-    [SerializeField] [Range(0, 1)] private float nodeDensityMax = 0.5f;
+    [SerializeField] private int nodeConnectionsMin = 2;
+    [SerializeField] private int nodeConnectionsMax = 4;
+
+    private const int minimumNodes = 3;
+    private const int minimumConnections = 2;
 
     private void OnValidate()
     {
         // Min vals never exceeed max vals
         if (nodeCountMin > nodeCountMax) nodeCountMin = nodeCountMax;
-        if (nodeDensityMin > nodeDensityMax) nodeDensityMin = nodeDensityMax;
+        if (nodeConnectionsMin > nodeConnectionsMax) nodeConnectionsMin = nodeConnectionsMax;
 
         // Max vals never fall below min vals
         if (nodeCountMax < nodeCountMin) nodeCountMax = nodeCountMin;
-        if (nodeDensityMax < nodeDensityMin) nodeDensityMax = nodeDensityMin;
+        if (nodeConnectionsMax < nodeConnectionsMin) nodeConnectionsMax = nodeConnectionsMin;
 
-        // Node count is never negative
-        if (nodeCountMin < 0) nodeCountMin = 0;
-        if (nodeCountMax < 0) nodeCountMax = 0;
+        // Node count is never below absolute minimum
+        if (nodeCountMin < minimumNodes) nodeCountMin = minimumNodes;
+        if (nodeCountMax < minimumNodes) nodeCountMax = minimumNodes;
+
+        // Connection count is never below absolute minimum
+        if (nodeConnectionsMin < minimumConnections) nodeConnectionsMin = minimumConnections;
+        if (nodeConnectionsMax < minimumConnections) nodeConnectionsMax = minimumConnections;
+
+        // Connection count is never greater than number of possible connections
+        if (nodeConnectionsMax > nodeCountMax - 1) nodeConnectionsMax = nodeCountMax - 1;
     }
+    #endregion
+
+    #region Gizmos
+    private const float nodeRaidus = 0.2f;
+
+    private void OnDrawGizmos()
+    {
+        if (faultNodes != null && faultNodes.Nodes.Count > 0)
+        {
+            foreach (Node node in faultNodes.Nodes)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(node.Position, nodeRaidus);
+            }
+        }
+    }
+    #endregion
+
+    #region Variables
+    private const float planeSize = 10;
+
+    private NodeWeb faultNodes;
+    #endregion
+
+    #region Methods
+    public void GenerateFaultWeb()
+    {
+        faultNodes =
+            NodeWebGenerator.GenerateWebPlane(
+                new Vector2(
+                    transform.localScale.x * planeSize,
+                    transform.localScale.z * planeSize
+                    ),
+                nodeCountMin, nodeCountMax,
+                nodeConnectionsMin, nodeConnectionsMax);
+    }
+    public void ClearFaultWeb() => faultNodes = null;
+    #endregion
 }
