@@ -69,7 +69,10 @@ namespace SCARLET.NodeSystems
         {
             return !a.Equals(b);
         }
-
+        public override string ToString()
+        {
+            return "Node (" + Position.x + "," + Position.y + "," + Position.z + ")";
+        }
     }
 
     public struct NodeConnection

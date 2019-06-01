@@ -9,12 +9,13 @@ namespace SCARLET.NodeSystems
     {
         public static bool ConnectNodes(ref Node a, ref Node b)
         {
-            if (a.IsConnetedTo(b) || a == b)
+            if (a.IsConnetedTo(b) || b.IsConnetedTo(a) || a == b)
             {
                 return false;
             }
             else
             {
+                Debug.Log("Connecting " + a + " and " + b);
                 a.Connected.Add(b);
                 b.Connected.Add(a);
                 return true;

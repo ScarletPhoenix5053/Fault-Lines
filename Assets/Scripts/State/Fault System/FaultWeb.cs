@@ -8,6 +8,7 @@ public class FaultWeb : MonoBehaviour
     #region Inspector
     [Header("Connections")]
     [SerializeField] private Transform connectionContainer;
+    [SerializeField] private GameObject connectionPrefab;
     [Header("Node Field Generation")]
     [SerializeField] private int nodeCountMin = 7;
     [SerializeField] private int nodeCountMax = 7;
@@ -45,12 +46,12 @@ public class FaultWeb : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (faultNodes != null)
+        if (faultWeb != null)
         {
             // Draw gizmos for nodes
-            if (faultNodes.NodeCount > 0)
+            if (faultWeb.NodeCount > 0)
             {
-                foreach (Node node in faultNodes.Nodes)
+                foreach (Node node in faultWeb.Nodes)
                 {
                     Gizmos.color = Color.red;
                     Gizmos.DrawSphere(node.Position, nodeRaidus);
@@ -58,9 +59,9 @@ public class FaultWeb : MonoBehaviour
             }
 
             // Draw gizmos for connections
-            if (faultNodes.ConnectionCount > 0)
+            if (faultWeb.ConnectionCount > 0)
             {
-                foreach (NodeConnection connection in faultNodes.Connections)
+                foreach (NodeConnection connection in faultWeb.Connections)
                 {
                     Gizmos.color = Color.black;
                     Gizmos.DrawLine(connection.A.Position, connection.B.Position);
@@ -73,13 +74,14 @@ public class FaultWeb : MonoBehaviour
     #region Variables
     private const float planeSize = 10;
 
-    private NodeWeb faultNodes;
+    private NodeWeb faultWeb;
     #endregion
 
     #region Methods
     public void GenerateFaultWeb()
     {
-        faultNodes =
+        // Create Web
+        faultWeb =
             NodeWebGenerator.GenerateWebPlane(
                 new Vector2(
                     transform.localScale.x * planeSize,
@@ -87,7 +89,13 @@ public class FaultWeb : MonoBehaviour
                     ),
                 nodeCountMin, nodeCountMax,
                 nodeConnectionsMin, nodeConnectionsMax);
+
+        // Create renderers for connections
+        for (int i = 0; i < faultWeb.ConnectionCount; i++)
+        {
+
+        }
     }
-    public void ClearFaultWeb() => faultNodes = null;
+    public void ClearFaultWeb() => faultWeb = null;
     #endregion
 }

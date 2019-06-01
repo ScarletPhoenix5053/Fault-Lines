@@ -48,13 +48,17 @@ namespace SCARLET.NodeSystems
                         var connectionIsValid = false;
                         do
                         {
-                            connectionIsValid = nodeWeb.Nodes[i].ConnectTo(nodeWeb.Nodes[Random.Range(0, nodeWeb.NodeCount)]);
+                            var randomOtherNode = nodeWeb.Nodes[Random.Range(0, nodeWeb.NodeCount)];
+                            connectionIsValid = nodeWeb.Nodes[i].ConnectTo(randomOtherNode);
+                            if (!connectionIsValid) Debug.Log("Invalid connection between " + nodeWeb.Nodes[i] + " and " + randomOtherNode);
                         }
                         while (!connectionIsValid);                       
                     }
                 }
             }
+            //nodeWeb.UpdateConnections();
 
+            
             return nodeWeb;
         }
     }
