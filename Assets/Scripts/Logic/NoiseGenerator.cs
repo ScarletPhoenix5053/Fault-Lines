@@ -6,15 +6,15 @@ public static class NoiseGenerator
     private const float minScale = 0.0001f;
     private const int perlinLimit = 100000;   // Letting perlin noise values get too large leads to flat maps
 
-    public static float[] GeneratePerlinWave(int sampleCount, int octaves, float scale, float persistence, float lacunarity, int seed = 0)
+    public static float[] GeneratePerlinWave(int sampleCount, float noiseScale, float magnitude, int octaves, float persistence, float lacunarity, int seed = 0)
     {
         // Escape conditions
-        if (scale == 0)
+        if (noiseScale == 0)
         {
             Debug.LogWarning("Scale should not be 0, clamping to " + minScale);
-            scale = minScale;
+            noiseScale = minScale;
         }
-        else if (scale ==  0)
+        else if (noiseScale ==  0)
         {
             Debug.LogWarning("Scale cannot be less than 0! Aborting method");
             return null;
@@ -37,23 +37,23 @@ public static class NoiseGenerator
         // Sample generation
         for (int x = 0; x < sampleCount; x++)
         {
-            float amplitude = 1;
-            float frequency = 1;
+            var amp = 1f;
+            var freq = 1f;
 
             // Persistent hieght over each ocatve
             float noiseHeight = 0;
 
             for (int o = 0; o < octaves; o++)
             {
-                float sample = (x - halfLength) / scale * frequency + octaveOffsets[o];
+                float sample = (x - halfLength) / noiseScale * freq + octaveOffsets[o];
 
                 // Find and track height
                 float perlinValue = Mathf.PerlinNoise(sample, 0) * 2 - 1;
-                noiseHeight += perlinValue * amplitude;
+                noiseHeight += perlinValue * x;
 
                 // Tune values for next ocatve
-                amplitude *= persistence;
-                frequency *= lacunarity;
+                amp *= persistence;
+                freq *= lacunarity;
             }
 
             // Track highest and lowest value of noiseHieght
@@ -68,7 +68,7 @@ public static class NoiseGenerator
         // Normalize height
         for (int x = 0; x < sampleCount; x++)
         {
-            noiseSamples[x] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseSamples[x]);
+            noiseSamples[x] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseSamples[x]) * magnitude;
         }
 
         return noiseSamples;

@@ -94,8 +94,8 @@ namespace SCARLET.NodeSystems
             if (!(obj is NodeConnection)) return false;
             NodeConnection other = (NodeConnection)obj;
 
-            if (other.A == A &&
-                other.B == B)
+            if ((other.A == A && other.B == B) ||
+                (other.A == B && other.B == A))
             {
                 return true;
             }

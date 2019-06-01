@@ -9,7 +9,7 @@ public class FaultLinkRenderer : MonoBehaviour
 {
     [Header("Options")]
     [SerializeField] private FaultLinkNoisePrefs noiseSettings;
-    [SerializeField] private AnimationCurve pathDeviation;
+    [SerializeField] private AnimationCurve pathCurve;
 
     public int Seed { get; set; }
 
@@ -23,6 +23,6 @@ public class FaultLinkRenderer : MonoBehaviour
         nodeB = connection.B;
 
         if (lineRenderer == null) lineRenderer = GetComponent<LineRenderer>();
-        FaultLogic.CreateFaultLinePath(nodeA, nodeB, noiseSettings, pathDeviation, lineRenderer);
+        FaultLogic.CreateFaultLinePath(nodeA, nodeB, noiseSettings, pathCurve, lineRenderer);
     }
 }

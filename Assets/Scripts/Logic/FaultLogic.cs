@@ -13,14 +13,15 @@ public static class FaultLogic
             newLink.GetComponent<FaultLinkRenderer>().SetNodes(faultWeb.Connections[i]);
         }
     }
-    public static void CreateFaultLinePath(Node nodeA, Node nodeB, FaultLinkNoisePrefs prefs, AnimationCurve deviation, LineRenderer lineRenderer)
+    public static void CreateFaultLinePath(Node nodeA, Node nodeB, FaultLinkNoisePrefs prefs, AnimationCurve pathCurve, LineRenderer lineRenderer)
     {
         // Get noise sample
-        var noiseSample = 
+        var noiseSample =
             NoiseGenerator.GeneratePerlinWave(
                 prefs.SampleCount,
+                prefs.NoiseScale,
+                prefs.Magnitude,
                 prefs.Octaves,
-                prefs.Scale,
                 prefs.Persistence,
                 prefs.Lacunarity,
                 prefs.Seed);
@@ -34,11 +35,16 @@ public static class FaultLogic
 
         // Adjust points using sample & curve
         var dir = nodeB.Position - nodeA.Position;
-        var rot = Quaternion.Euler(dir);
+        var rot = new Quaternion();
+        rot.SetLookRotation(dir);
 
         for (int i = 0; i < prefs.SampleCount; i++)
         {
-            var modifier = new Vector3(noiseSample[i]-0.5f, 0, noiseSample[i]-0.5f);
+            var t = Mathf.InverseLerp(0, prefs.SampleCount, i);
+            var deviation = prefs.DeviationCurve.Evaluate(t);
+            var pathOffset = pathCurve.Evaluate(t);
+            var modifier = rot * new Vector3((noiseSample[i]-0.5f)+pathOffset, 0,0) * deviation;
+            
             worldPositions[i] += modifier;
         }
 
