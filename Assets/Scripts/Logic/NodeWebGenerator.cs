@@ -50,7 +50,6 @@ namespace SCARLET.NodeSystems
                         {
                             var randomOtherNode = nodeWeb.Nodes[Random.Range(0, nodeWeb.NodeCount)];
                             connectionIsValid = nodeWeb.Nodes[i].ConnectTo(randomOtherNode);
-                            if (!connectionIsValid) Debug.Log("Invalid connection between " + nodeWeb.Nodes[i] + " and " + randomOtherNode);
                         }
                         while (!connectionIsValid);                       
                     }

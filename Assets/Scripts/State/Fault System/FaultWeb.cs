@@ -91,11 +91,13 @@ public class FaultWeb : MonoBehaviour
                 nodeConnectionsMin, nodeConnectionsMax);
 
         // Create renderers for connections
-        for (int i = 0; i < faultWeb.ConnectionCount; i++)
-        {
+        FaultLogic.CreateFaultLinkRenderers(connectionContainer, faultWeb, connectionPrefab);
 
-        }
     }
-    public void ClearFaultWeb() => faultWeb = null;
+    public void ClearFaultWeb()
+    {
+        connectionContainer.ClearChildren();
+        faultWeb = null;
+    }
     #endregion
 }

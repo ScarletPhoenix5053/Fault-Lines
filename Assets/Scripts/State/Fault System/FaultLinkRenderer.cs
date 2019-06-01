@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SCARLET.NodeSystems;
 
+//[ExecuteInEditMode]
 [RequireComponent(typeof(LineRenderer))]
 public class FaultLinkRenderer : MonoBehaviour
 {
@@ -12,13 +14,15 @@ public class FaultLinkRenderer : MonoBehaviour
     public int Seed { get; set; }
 
     private LineRenderer lineRenderer;
+    private Node nodeA;
+    private Node nodeB;
+    
+    public void SetNodes(NodeConnection connection)
+    {
+        nodeA = connection.A;
+        nodeB = connection.B;
 
-    private void Reset()
-    {
-        lineRenderer = GetComponent<LineRenderer>();
-    }
-    private void Awake()
-    {
-        lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer == null) lineRenderer = GetComponent<LineRenderer>();
+        FaultLogic.CreateFaultLinePath(nodeA, nodeB, noiseSettings, pathDeviation, lineRenderer);
     }
 }

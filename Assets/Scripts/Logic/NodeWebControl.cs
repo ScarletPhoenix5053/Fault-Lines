@@ -15,7 +15,6 @@ namespace SCARLET.NodeSystems
             }
             else
             {
-                Debug.Log("Connecting " + a + " and " + b);
                 a.Connected.Add(b);
                 b.Connected.Add(a);
                 return true;
