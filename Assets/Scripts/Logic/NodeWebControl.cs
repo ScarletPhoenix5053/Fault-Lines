@@ -20,5 +20,23 @@ namespace SCARLET.NodeSystems
                 return true;
             }
         }
+        public static List<NodeConnection> MapConnectionsIn(NodeWeb web)
+        {
+            var connections = new List<NodeConnection>();
+
+            foreach (Node node in web.Nodes)
+            {
+                // Loop thru each node
+                // Add each connection if not already in list
+                foreach (Node connected in node.Connected)
+                {
+                    var connection = new NodeConnection(node, connected);
+                    if (connections.Contains(connection)) continue;
+                    else connections.Add(connection);
+                }
+            }
+
+            return connections;
+        }
     }
 }

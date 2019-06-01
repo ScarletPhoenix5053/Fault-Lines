@@ -45,12 +45,26 @@ public class FaultWeb : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (faultNodes != null && faultNodes.Nodes.Count > 0)
+        if (faultNodes != null)
         {
-            foreach (Node node in faultNodes.Nodes)
+            // Draw gizmos for nodes
+            if (faultNodes.NodeCount > 0)
             {
-                Gizmos.color = Color.red;
-                Gizmos.DrawSphere(node.Position, nodeRaidus);
+                foreach (Node node in faultNodes.Nodes)
+                {
+                    Gizmos.color = Color.red;
+                    Gizmos.DrawSphere(node.Position, nodeRaidus);
+                }
+            }
+
+            // Draw gizmos for connections
+            if (faultNodes.ConnectionCount > 0)
+            {
+                foreach (NodeConnection connection in faultNodes.Connections)
+                {
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawLine(connection.A.Position, connection.B.Position);
+                }
             }
         }
     }

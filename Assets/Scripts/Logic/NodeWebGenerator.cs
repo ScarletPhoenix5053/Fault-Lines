@@ -8,13 +8,13 @@ namespace SCARLET.NodeSystems
     {
         public static NodeWeb GenerateWebPlane(Vector2 dimensions, int countMin, int countMax, int connectionsMin, int connectionsMax)
         {
-            // Create nodes
             var count = Random.Range(countMin, countMax + 1);
             var nodeWeb = new NodeWeb();
 
             var startX = -(dimensions.x / 2);
             var startY = -(dimensions.y / 2);
 
+            // Create nodes
             for (int i = 0; i < count; i++)
             {
                 // Generate node
@@ -30,9 +30,7 @@ namespace SCARLET.NodeSystems
             }
 
             // Connect nodes
-            var connectionLimits = new int[count];
-
-               
+            var connectionLimits = new int[count];                           
             if (connectionsMax > 0)
             {
                 for (int i = 0; i < count; i++)

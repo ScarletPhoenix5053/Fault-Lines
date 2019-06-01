@@ -5,10 +5,26 @@ namespace SCARLET.NodeSystems
 {
     public class NodeWeb
     {
-        public List<Node> Nodes { get; internal set; } = new List<Node>();
+        private List<Node> nodes = new List<Node>();
+        public List<Node> Nodes { get => nodes; internal set { nodes = value; UpdateConnections(); } } 
         public int NodeCount => Nodes != null ? Nodes.Count : 0;
 
-        public List<NodeConnection> Connections { get; internal set; }        
+        private List<NodeConnection> connections;
+        public List<NodeConnection> Connections
+        {
+            get
+            {
+                if (connections == null) UpdateConnections();
+                return connections;
+            }
+            internal set
+            {
+                connections = value;
+            }
+        }
+        public int ConnectionCount => Connections != null ? Connections.Count : 0;
+
+        internal void UpdateConnections() => connections = NodeWebControl.MapConnectionsIn(this);
     }
 
     public struct Node
@@ -26,13 +42,25 @@ namespace SCARLET.NodeSystems
         {
             this.web = web;
             Position = position;
-            Connected = null;
+            Connected = new List<Node>();
         }
         public Node(NodeWeb parent) : this(parent, Vector3.zero) { }
 
-        public bool IsConnetedTo(Node other) => Connected.Contains(other);
+        public bool IsConnetedTo(Node other) => Connected != null ? Connected.Contains(other) : false;
         public bool ConnectTo(Node other) => NodeWebControl.ConnectNodes(ref this, ref other);
 
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Node)) return false;
+            Node other = (Node)obj;
+
+            if (other.Position == Position) return true;
+            else return false;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         public static bool operator ==(Node a, Node b)
         {
             return a.Equals(b);
@@ -53,6 +81,34 @@ namespace SCARLET.NodeSystems
         {
             A = a;
             B = b;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is NodeConnection)) return false;
+            NodeConnection other = (NodeConnection)obj;
+
+            if (other.A == A &&
+                other.B == B)
+            {
+                return true;
+            }
+            else return false;
+        }
+        public override int GetHashCode()
+        {
+            int hash = 17;
+            hash = hash * 31 + A.GetHashCode();
+            hash = hash * 31 + B.GetHashCode();
+            return hash;
+        }
+        public static bool operator ==(NodeConnection a, NodeConnection b)
+        {
+            return a.Equals(b);
+        }
+        public static bool operator !=(NodeConnection a, NodeConnection b)
+        {
+            return !a.Equals(b);
         }
     }
 }
