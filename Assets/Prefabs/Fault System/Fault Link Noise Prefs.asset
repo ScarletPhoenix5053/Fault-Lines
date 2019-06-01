@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SampleCount: 16
   Seed: 0
-  Octaves: 3
-  Scale: 1
+  Octaves: 1
+  Scale: 1000
   Persistence: 0.5
   Lacunarity: 2

@@ -5,7 +5,7 @@ public static class NoiseGenerator
 {
     private const float minScale = 0.0001f;
     private const int perlinLimit = 100000;   // Letting perlin noise values get too large leads to flat maps
-    
+
     public static float[] GeneratePerlinWave(int sampleCount, int octaves, float scale, float persistence, float lacunarity, int seed = 0)
     {
         // Escape conditions
@@ -61,6 +61,8 @@ public static class NoiseGenerator
                 maxNoiseHeight = noiseHeight;
             else if (noiseHeight < minNoiseHeight)
                 minNoiseHeight = noiseHeight;
+
+            noiseSamples[x] = noiseHeight;
         }
 
         // Normalize height

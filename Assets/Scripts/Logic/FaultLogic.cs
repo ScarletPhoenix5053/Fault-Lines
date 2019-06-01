@@ -38,7 +38,7 @@ public static class FaultLogic
 
         for (int i = 0; i < prefs.SampleCount; i++)
         {
-            var modifier = rot * new Vector3(noiseSample[i], 0, 0);
+            var modifier = new Vector3(noiseSample[i]-0.5f, 0, noiseSample[i]-0.5f);
             worldPositions[i] += modifier;
         }
 

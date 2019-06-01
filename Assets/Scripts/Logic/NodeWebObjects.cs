@@ -71,7 +71,10 @@ namespace SCARLET.NodeSystems
         }
         public override string ToString()
         {
-            return "Node (" + Position.x + "," + Position.y + "," + Position.z + ")";
+            return "Node (" 
+                + Position.x.ToString("G3") + "," 
+                + Position.y.ToString("G3") + "," 
+                + Position.z.ToString("G3") + ")";
         }
     }
 

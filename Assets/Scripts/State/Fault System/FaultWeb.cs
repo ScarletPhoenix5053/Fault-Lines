@@ -80,6 +80,8 @@ public class FaultWeb : MonoBehaviour
     #region Methods
     public void GenerateFaultWeb()
     {
+        ClearFaultWeb();
+
         // Create Web
         faultWeb =
             NodeWebGenerator.GenerateWebPlane(
